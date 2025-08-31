@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/LewieJ08/weather-api/issues"
   },
-  "homepage": "https://github.com/LewieJ08/weather-api#readme"
+  "homepage": "https://github.com/LewieJ08/weather-api#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }

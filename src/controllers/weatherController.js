@@ -1,9 +1,31 @@
-const getWeather = (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: `Weather for ${req.query.location} fetched successfully.`,
-        data: {sampleData: `${req.query.location} weather.`}
-    });
+const connectRedis = require("../config/redis");
+const fetchWeather = require("../services/weatherService");
+
+const getWeather = async (req, res, next) => {
+    let data;
+    const location = req.query.location;
+
+    try {
+        const client = await connectRedis();
+        const cachedData = await client.get(location);
+
+        if (!cachedData) {
+            data = await fetchWeather(location);
+            await client.set(location, JSON.stringify(data));
+            console.log(`${location} Data cached for xx hours.`);
+        } else {
+            data = JSON.parse(cachedData);
+            console.log(`Fetched ${location} data from cache.`);
+        }
+
+        res.status(200).json({
+            success: true,
+            message: `Weather for ${location} fetched successfully.`,
+            data: data
+        });
+    } catch(error) {
+        next(error);
+    }
 }
 
 module.exports = {getWeather};

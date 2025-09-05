@@ -10,7 +10,7 @@ module.exports = async () => {
             });
 
             await client.connect();
-            console.log("Redis cache connected.")
+            console.log("Redis cache connected.");
 
         } catch(error) {
             console.log(`Redis connection failed: ${error.stack}`);

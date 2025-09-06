@@ -5,6 +5,13 @@ const getWeather = async (req, res, next) => {
     let data;
     const location = req.query.location;
 
+    if (!location) {
+        return res.status(404).json({
+            success: true,
+            error: "No location query found"
+        });
+    }
+
     try {
         const client = await connectRedis();
         const cachedData = await client.get(location);

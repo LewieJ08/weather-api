@@ -11,8 +11,8 @@ const getWeather = async (req, res, next) => {
 
         if (!cachedData) {
             data = await fetchWeather(location);
-            await client.set(location, JSON.stringify(data));
-            console.log(`${location} Data cached for xx hours.`);
+            await client.set(location, JSON.stringify(data), "EX", 43200);
+            console.log(`${location} Data cached for 12 hours.`);
         } else {
             data = JSON.parse(cachedData);
             console.log(`Fetched ${location} data from cache.`);

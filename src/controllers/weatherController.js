@@ -7,7 +7,7 @@ const getWeather = async (req, res, next) => {
 
     if (!location) {
         return res.status(404).json({
-            success: true,
+            success: false,
             error: "No location query found"
         });
     }

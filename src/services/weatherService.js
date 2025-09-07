@@ -13,10 +13,20 @@ module.exports = async location => {
         const days = [];
         
         for (day of rawData.days) {
+            const hours = [];
+
+            for (hour of day.hours) {
+                hours.push({
+                    dateTime: hour.datetime,
+                    temp: hour.temp
+                });
+            }
+            
             if (!days[9]) {
                 days.push({
                     dateTime: day.datetime,
                     tempMax: day.tempmax,
+                    hours: hours
                  });
             } else {
                 break;

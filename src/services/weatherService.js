@@ -6,22 +6,23 @@ module.exports = async location => {
         });
 
         if (!response.ok) {
-            throw new Error({status: response.status});
+            const error = new Error(`Weather API failed with status code ${response.status}`);
+            error.status = response.status;
+            throw error;
         }
 
         const rawData = await response.json();
         const days = [];
         
-        for (day of rawData.days) {
+        for (const day of rawData.days) {
             const hours = [];
-
-            for (hour of day.hours) {
+            for (const hour of day.hours) {
                 hours.push({
                     dateTime: hour.datetime,
                     temp: hour.temp
                 });
             }
-            
+
             if (!days[9]) {
                 days.push({
                     dateTime: day.datetime,
@@ -35,6 +36,10 @@ module.exports = async location => {
 
         return days;
     } catch(error) {
+        if (error.status === 400) {
+            throw new Error(`Must be valid location, got '${location}'`);
+        }
+
         throw error;
     }
 }

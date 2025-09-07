@@ -3,6 +3,7 @@ const fetchWeather = require("../services/weatherService");
 
 const getWeather = async (req, res, next) => {
     let data;
+    const cacheExpiry = process.env.CACHE_EXPIRE || 43200;
     const location = req.query.location;
 
     if (!location) {
@@ -18,8 +19,8 @@ const getWeather = async (req, res, next) => {
 
         if (!cachedData) {
             data = await fetchWeather(location);
-            await client.set(location, JSON.stringify(data), "EX", 43200);
-            console.log(`${location} Data cached for 12 hours.`);
+            await client.set(location, JSON.stringify(data), "EX", cacheExpiry);
+            console.log(`${location} Data cached for ${cacheExpiry} seconds.`);
         } else {
             data = JSON.parse(cachedData);
             console.log(`Fetched ${location} data from cache.`);

@@ -3,7 +3,7 @@ const fetchWeather = require("../services/weatherService");
 
 const getWeather = async (req, res, next) => {
     let data;
-    const cacheExpiry = process.env.CACHE_EXPIRE || 43200;
+    const cacheExpiry = process.env.CACHE_EXPIRY || 43200;
     const location = req.query.location;
 
     if (!location) {

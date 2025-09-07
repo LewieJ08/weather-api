@@ -18,15 +18,20 @@ module.exports = async location => {
             const hours = [];
             for (const hour of day.hours) {
                 hours.push({
-                    dateTime: hour.datetime,
-                    temp: hour.temp
+                    datetime: hour.datetime,
+                    temp: hour.temp,
+                    icon: hour.icon
                 });
             }
 
             if (!days[9]) {
                 days.push({
-                    dateTime: day.datetime,
-                    tempMax: day.tempmax,
+                    datetime: day.datetime,
+                    tempmax: day.tempmax,
+                    tempmin: day.tempmin,
+                    conditions: day.conditions,
+                    description: day.description,
+                    icon: day.icon,
                     hours: hours
                  });
             } else {
@@ -34,7 +39,13 @@ module.exports = async location => {
             }
         }
 
-        return days;
+        const data = {
+            address: rawData.address,
+            description: rawData.description,
+            days: days
+        };
+
+        return data;
     } catch(error) {
         if (error.status === 400) {
             throw new Error(`Must be valid location, got '${location}'`);
